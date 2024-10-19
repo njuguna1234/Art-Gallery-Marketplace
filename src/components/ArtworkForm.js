@@ -1,43 +1,75 @@
-// ArtworkForm.js
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+// src/components/ArtworkForm.js
 
-const ArtworkForm = ({ onSubmit }) => {
-  const validationSchema = Yup.object({
-    title: Yup.string().required('Title is required').min(3, 'Title must be at least 3 characters long'),
-    price: Yup.number().required('Price is required').positive('Price must be a positive number'),
-    description: Yup.string().required('Description is required'),
-  });
+import React, { useState } from 'react';
+import '../styles/Form.css';
+
+function ArtworkForm() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState(0);
+  const [artworkImage, setArtworkImage] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      title,
+      description,
+      price,
+      artworkImage,
+    });
+
+    // Implement form submission logic, e.g., sending data to the backend
+  };
+
+  const handleFileChange = (e) => {
+    setArtworkImage(e.target.files[0]); // Save the selected file
+  };
 
   return (
-    <Formik
-      initialValues={{ title: '', price: '', description: '' }}
-      validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <label htmlFor="title">Title</label>
-          <Field type="text" name="title" />
-          <ErrorMessage name="title" component="div" />
+    <div className="form-container">
+      <form onSubmit={handleSubmit} className="form">
+        <h2>Upload Artwork</h2>
 
-          <label htmlFor="price">Price</label>
-          <Field type="number" name="price" />
-          <ErrorMessage name="price" component="div" />
+        <label htmlFor="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
 
-          <label htmlFor="description">Description</label>
-          <Field as="textarea" name="description" />
-          <ErrorMessage name="description" component="div" />
+        <label htmlFor="description">Description</label>
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows="4"
+          required
+        />
 
-          <button type="submit" disabled={isSubmitting}>Submit</button>
-        </Form>
-      )}
-    </Formik>
+        <label htmlFor="price">Price ($)</label>
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+
+        <label htmlFor="artworkImage">Upload Artwork Image</label>
+        <input
+          type="file"
+          id="artworkImage"
+          accept="image/*"
+          onChange={handleFileChange}
+          required
+        />
+
+        <button type="submit">Upload</button>
+      </form>
+    </div>
   );
-};
+}
 
 export default ArtworkForm;

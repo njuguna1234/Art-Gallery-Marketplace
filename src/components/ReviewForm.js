@@ -1,49 +1,48 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+// src/components/ReviewForm.js
 
-function ArtworkForm() {
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      description: '',
-      price: '',
-    },
-    validationSchema: Yup.object({
-      title: Yup.string().required('Title is required'),
-      description: Yup.string().required('Description is required'),
-      price: Yup.number().positive('Price must be a positive number').required('Price is required'),
-    }),
-    onSubmit: (values) => {
-      fetch('/api/artworks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error('Error:', error));
-    },
-  });
+import React, { useState } from 'react';
+import '../styles/Form.css';
+
+function ReviewForm() {
+  const [content, setContent] = useState('');
+  const [rating, setRating] = useState(5);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ content, rating });
+    // Form submission logic here
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <h1>Add Artwork</h1>
-      <label>Title</label>
-      <input type="text" name="title" {...formik.getFieldProps('title')} />
-      {formik.touched.title && formik.errors.title ? <div>{formik.errors.title}</div> : null}
+    <div className="form-container">
+      <form onSubmit={handleSubmit} className="form">
+        <h2>Leave a Review</h2>
+        <label htmlFor="content">Review</label>
+        <textarea
+          id="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          rows="4"
+          required
+        />
 
-      <label>Description</label>
-      <textarea name="description" {...formik.getFieldProps('description')}></textarea>
-      {formik.touched.description && formik.errors.description ? <div>{formik.errors.description}</div> : null}
+        <label htmlFor="rating">Rating</label>
+        <select
+          id="rating"
+          value={rating}
+          onChange={(e) => setRating(e.target.value)}
+        >
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Good</option>
+          <option value="3">3 - Average</option>
+          <option value="2">2 - Poor</option>
+          <option value="1">1 - Terrible</option>
+        </select>
 
-      <label>Price</label>
-      <input type="number" name="price" {...formik.getFieldProps('price')} />
-      {formik.touched.price && formik.errors.price ? <div>{formik.errors.price}</div> : null}
-
-      <button type="submit">Add Artwork</button>
-    </form>
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
   );
 }
 
-export default ArtworkForm;
+export default ReviewForm;

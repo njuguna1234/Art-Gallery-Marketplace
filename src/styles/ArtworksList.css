@@ -1,0 +1,29 @@
+/* styles/ArtworksList.css */
+
+.artwork-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .artwork-card {
+    border: 1px solid #585151;
+    border-radius: 8px;
+    padding: 16px;
+    width: 250px;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .artwork-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .artwork-card p {
+    font-size: 1em;
+    color: #080707;
+  }
+  
