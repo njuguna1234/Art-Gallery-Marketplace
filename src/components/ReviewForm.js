@@ -1,16 +1,43 @@
-// src/components/ReviewForm.js
-
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-function ReviewForm() {
+function ReviewForm({ artworkId }) { // Accept artworkId as a prop
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(5);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ content, rating });
-    // Form submission logic here
+
+    // Prepare the data for the POST request
+    const reviewData = {
+      content,
+      rating,
+      artworkId, // Include the artworkId to associate the review with the artwork
+    };
+
+    // Send POST request to the backend
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reviewData),
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to submit review');
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('Review submitted successfully:', data);
+        // Handle successful review submission (e.g., update UI, reset form, etc.)
+        setContent(''); // Reset content
+        setRating(5);   // Reset rating
+      })
+      .catch(err => {
+        console.error('Error submitting review:', err);
+      });
   };
 
   return (

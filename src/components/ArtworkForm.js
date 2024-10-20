@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-function ArtworkForm() {
+function ArtworkForm({ onSubmit }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -11,14 +11,42 @@ function ArtworkForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      title,
-      description,
-      price,
-      artworkImage,
-    });
 
-    // Implement form submission logic, e.g., sending data to the backend
+    // Create a FormData object to send the image and other fields
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('price', price);
+    if (artworkImage) {
+      formData.append('artworkImage', artworkImage); // Append the selected file
+    }
+
+    // Send data to the backend
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/artworks`, {
+      method: 'POST',
+      body: formData,  // Send the FormData
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Artwork uploaded successfully:', data);
+        // Optionally, you can call onSubmit to update the artwork list in ArtistProfile
+        if (onSubmit) {
+          onSubmit(data);
+        }
+        // Reset the form
+        setTitle('');
+        setDescription('');
+        setPrice(0);
+        setArtworkImage(null);
+      })
+      .catch((error) => {
+        console.error('Error uploading artwork:', error);
+      });
   };
 
   const handleFileChange = (e) => {

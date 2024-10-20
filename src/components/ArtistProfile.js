@@ -1,39 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import ArtworkForm from './ArtworkForm';
-import '../styles/ArtistProfile.css';
+import React, { useEffect, useState } from 'react';
 
 function ArtistProfile() {
   const [artworks, setArtworks] = useState([]);
 
   useEffect(() => {
-    fetch('/api/artists/artworks')
-      .then(res => res.json())
-      .then(data => setArtworks(data))
-      .catch(err => console.error(err));
-  }, []);
+    const fetchArtworks = async () => {
+      try {
+        const response = await fetch('https://backend-deployment-4.onrender.com/api/artworks');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setArtworks(data.artworks);
+      } catch (error) {
+        console.error("Error fetching artworks:", error);
+      }
+    };
 
-  const handleArtworkSubmit = (values) => {
-    fetch('/api/artworks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
-    })
-      .then(response => response.json())
-      .then(newArtwork => setArtworks([...artworks, newArtwork]))
-      .catch(err => console.error(err));
-  };
+    fetchArtworks();
+  }, []);
 
   return (
     <div>
-      <h1>Your Art Listings</h1>
-      {artworks.map(artwork => (
-        <div key={artwork.id}>
-          <h2>{artwork.title}</h2>
-          <p>{artwork.description}</p>
-        </div>
-      ))}
-      <h2>Add New Artwork</h2>
-      <ArtworkForm onSubmit={handleArtworkSubmit} />
+      <h2>Your Artworks</h2>
+      <ul>
+        {artworks.map((artwork) => (
+          <li key={artwork.id}>
+            <h3>{artwork.title}</h3>
+            <p>{artwork.description}</p>
+            <p>Price: ${artwork.price}</p>
+            <img src={artwork.image_url} alt={artwork.title} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

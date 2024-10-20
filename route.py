@@ -4,7 +4,9 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for your React frontend
+
+# Enable CORS for your React frontend
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Directory for saving uploaded images
 UPLOAD_FOLDER = './uploads'
@@ -40,6 +42,17 @@ def submit_artwork():
         }), 201
     else:
         return jsonify({"error": "Invalid image format"}), 400
+
+@app.route('/api/artworks', methods=['GET'])
+def get_artworks():
+    # Replace this with actual logic to fetch artworks from your database
+    artworks = [{"id": 1, "title": "Sample Art", "description": "Description of sample art", "price": 100.0, "image_url": "/uploads/sample.jpg"}]
+    return jsonify({"artworks": artworks}), 200
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    # Implement your login logic here
+    return jsonify({"message": "Login successful"}), 200
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):

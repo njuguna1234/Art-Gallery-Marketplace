@@ -1,5 +1,3 @@
-// src/components/UploadForm.js
-
 import React, { useState } from 'react';
 import '../styles/Form.css'; // Assuming you're using a common form style
 
@@ -9,16 +7,27 @@ function UploadForm() {
   const [price, setPrice] = useState('');
   const [file, setFile] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('price', price);
-    formData.append('file', file);
+    formData.append('image', file); // Ensure 'image' matches the backend key
 
-    // Handle form submission, you can use fetch or axios to send form data to your backend
-    console.log({ title, description, price, file });
+    try {
+      const response = await fetch('https://backend-deployment-4.onrender.com/api/artworks', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data.message); // Handle success response
+    } catch (error) {
+      console.error("Error during artwork submission:", error);
+    }
   };
 
   return (

@@ -5,10 +5,16 @@ function ArtworksList() {
   const [artworks, setArtworks] = useState([]);
 
   useEffect(() => {
-    fetch('/api/artworks')
-      .then(res => res.json())
+    // Use the environment variable for the backend URL
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/artworks`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
       .then(data => setArtworks(data))
-      .catch(err => console.error(err));
+      .catch(err => console.error('Error fetching artworks:', err));
   }, []);
 
   return (

@@ -1,5 +1,3 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
 import '../styles/Login.css';
 
@@ -9,8 +7,28 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Email:', email, 'Password:', password);
+
     // Implement authentication logic here
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('Login successful:', data);
+        // Handle successful login (e.g., save token, redirect, etc.)
+      })
+      .catch(err => {
+        console.error('Error during login:', err);
+      });
   };
 
   return (
