@@ -17,7 +17,7 @@ function LoginForm() {
     };
 
     // Send POST request to the backend
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
+    fetch('https://artgalary-backend-5.onrender.com/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
