@@ -16,7 +16,7 @@ function ReviewForm({ artworkId }) { // Accept artworkId as a prop
     };
 
     // Send POST request to the backend
-    fetch(`http://localhost:3000/reviews`, {
+    fetch(`http://localhost:8001/reviews`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
