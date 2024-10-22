@@ -16,7 +16,7 @@ function ReviewForm({ artworkId }) { // Accept artworkId as a prop
     };
 
     // Send POST request to the backend
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reviews`, {
+    fetch(`http://localhost:3000/reviews`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

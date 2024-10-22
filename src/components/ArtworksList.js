@@ -6,7 +6,7 @@ function ArtworksList() {
 
   useEffect(() => {
     // Use the environment variable for the backend URL
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/artworks`)
+    fetch(`http://localhost:8001/artworks`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Network response was not ok');

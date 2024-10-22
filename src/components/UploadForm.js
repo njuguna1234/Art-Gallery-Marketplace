@@ -16,7 +16,7 @@ function UploadForm() {
     formData.append('image', file); // Ensure 'image' matches the backend key
 
     try {
-      const response = await fetch('https://backend-deployment-4.onrender.com/api/artworks', {
+      const response = await fetch('http://localhost:3000/artwork', {
         method: 'POST',
         body: formData,
       });
