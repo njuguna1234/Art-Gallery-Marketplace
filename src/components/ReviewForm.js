@@ -4,6 +4,7 @@ import '../styles/Form.css';
 function ReviewForm({ artworkId }) { // Accept artworkId as a prop
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(5);
+  const [submittedReview, setSubmittedReview] = useState(null); // State to store the submitted review
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,9 +32,14 @@ function ReviewForm({ artworkId }) { // Accept artworkId as a prop
       })
       .then(data => {
         console.log('Review submitted successfully:', data);
-        // Handle successful review submission (e.g., update UI, reset form, etc.)
-        setContent(''); // Reset content
-        setRating(5);   // Reset rating
+        // Store the submitted review in the state
+        setSubmittedReview({
+          content: data.content, 
+          rating: data.rating
+        });
+        // Reset form inputs
+        setContent('');
+        setRating(5);
       })
       .catch(err => {
         console.error('Error submitting review:', err);
@@ -68,6 +74,15 @@ function ReviewForm({ artworkId }) { // Accept artworkId as a prop
 
         <button type="submit">Submit Review</button>
       </form>
+
+      {/* Conditionally render the submitted review */}
+      {submittedReview && (
+        <div className="submitted-review">
+          <h3>Your Review</h3>
+          <p><strong>Rating:</strong> {submittedReview.rating}</p>
+          <p><strong>Review:</strong> {submittedReview.content}</p>
+        </div>
+      )}
     </div>
   );
 }

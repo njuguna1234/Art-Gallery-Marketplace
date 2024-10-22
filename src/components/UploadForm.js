@@ -6,6 +6,8 @@ function UploadForm() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [file, setFile] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,13 +22,19 @@ function UploadForm() {
         method: 'POST',
         body: formData,
       });
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error uploading artwork');
       }
+
       const data = await response.json();
-      console.log(data.message); // Handle success response
+      setSuccessMessage(data.message || 'Artwork uploaded successfully!');
+      setErrorMessage('');
     } catch (error) {
-      console.error("Error during artwork submission:", error);
+      console.error('Error during artwork submission:', error);
+      setErrorMessage(error.message || 'An error occurred');
+      setSuccessMessage('');
     }
   };
 
@@ -71,6 +79,9 @@ function UploadForm() {
 
         <button type="submit">Upload Artwork</button>
       </form>
+
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }
