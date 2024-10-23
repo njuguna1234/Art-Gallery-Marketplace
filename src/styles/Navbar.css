@@ -1,67 +1,66 @@
 /* src/styles/Navbar.css */
 
-/* Navbar Styles */
 .navbar {
-  background-color: #3d5685;
-  padding: 15px;
-  color: rgb(32, 30, 30);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3f7ab4; /* Darker background color for the navbar */
+  padding: 15px 30px;
+  color: rgb(223, 55, 55); /* Text color */
 }
 
-.navbar h1 {
-  display: inline-block;
+h1 {
   margin: 0;
+  font-size: 1.8em;
 }
 
 .navbar-menu {
-  list-style: none;
+  list-style-type: none;
   display: flex;
+  align-items: center;
   margin: 0;
   padding: 0;
 }
 
 .navbar-menu li {
-  margin-left: 20px;
-  position: relative; /* Required for dropdown positioning */
+  margin-left: 20px; /* Spacing between menu items */
 }
 
-.navbar-menu a, .dropbtn {
-  color: rgb(54, 51, 51);
-  text-decoration: none;
-  padding: 10px 15px;
-  display: block;
+.navbar-menu a {
+  color: rgb(20, 18, 18); /* Link color */
+  text-decoration: none; /* Remove underline */
+  padding: 10px 15px; /* Padding for clickable area */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
 }
 
-.navbar-menu a:hover, .dropbtn:hover {
-  background-color: #818d80;
+.navbar-menu a:hover {
+  background-color: rgba(61, 58, 58, 0.2); /* Hover effect */
 }
 
-/* Dropdown Styles */
+.dropdown {
+  position: relative; /* Needed for absolute positioning of dropdown */
+}
+
 .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #8a8686;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  display: none; /* Hide by default */
+  position: absolute; /* Position relative to the dropdown */
+  background-color: #e9c98d; /* Dropdown background color */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  z-index: 1; /* Ensure dropdown is above other elements */
 }
 
 .dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+  color: #2c3e50; /* Color for dropdown links */
+  padding: 10px 15px; /* Padding for dropdown links */
+  display: block; /* Make the dropdown links block-level */
 }
 
 .dropdown-content a:hover {
-  background-color: #f1f1f1;
+  background-color: rgba(44, 62, 80, 0.1); /* Hover effect for dropdown links */
 }
 
-/* Show the dropdown when the button is clicked */
 .show {
-  display: block;
-}
-
-/* Add a hover effect on the dropdown button */
-.dropdown:hover .dropbtn {
-  background-color: #555;
+  display: block; /* Show dropdown when active */
 }

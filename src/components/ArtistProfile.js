@@ -6,7 +6,7 @@ function ArtistProfile() {
   useEffect(() => {
     const fetchArtworks = async () => {
       try {
-        const response = await fetch('http://localhost:8001/artworks');
+        const response = await fetch('https://art-gallery-backend-2-1.onrender.com/artworks');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

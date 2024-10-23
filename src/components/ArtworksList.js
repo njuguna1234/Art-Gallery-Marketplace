@@ -1,12 +1,12 @@
+// src/components/ArtworksList.js
 import React, { useEffect, useState } from 'react';
 import '../styles/ArtworksList.css';
 
-function ArtworksList() {
+function ArtworksList({ onPurchase }) {
   const [artworks, setArtworks] = useState([]);
 
   useEffect(() => {
-    // Use the environment variable for the backend URL
-    fetch(`http://localhost:8001/artworks`)
+    fetch(`https://art-gallery-backend-2-1.onrender.com/artworks`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Network response was not ok');
@@ -16,6 +16,12 @@ function ArtworksList() {
       .then(data => setArtworks(data))
       .catch(err => console.error('Error fetching artworks:', err));
   }, []);
+
+  const handlePurchase = (artwork) => {
+    if (onPurchase) {
+      onPurchase(artwork); // Call onPurchase with the selected artwork
+    }
+  };
 
   return (
     <div className="artworks-list-container">
@@ -27,6 +33,7 @@ function ArtworksList() {
             <h2>{artwork.title}</h2>
             <p>{artwork.description}</p>
             <p>Price: ${artwork.price}</p>
+            <button onClick={() => handlePurchase(artwork)}>Purchase</button>
           </div>
         ))}
       </div>

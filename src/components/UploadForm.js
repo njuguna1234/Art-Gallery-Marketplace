@@ -20,7 +20,7 @@ function ArtworkForm({ artistId, onSubmit }) {  // Accept artistId as prop
     };
 
     // Send data to the backend
-    fetch(`http://localhost:8001/artworks`, {
+    fetch(`https://art-gallery-backend-2-1.onrender.com/artworks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

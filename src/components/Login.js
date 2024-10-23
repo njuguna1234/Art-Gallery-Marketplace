@@ -40,7 +40,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:8001/users", {
+      const response = await axios.get("https://art-gallery-backend-2-1.onrender.com/users", {
         params: {
           username,
           password
