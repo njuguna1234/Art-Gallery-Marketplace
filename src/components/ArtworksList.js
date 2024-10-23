@@ -18,11 +18,12 @@ function ArtworksList() {
   }, []);
 
   return (
-    <div>
+    <div className="artworks-list-container">
       <h1>Available Artworks</h1>
-      <div>
+      <div className="artworks-list">
         {artworks.map(artwork => (
-          <div key={artwork.id}>
+          <div key={artwork.id} className="artwork-card">
+            <img src={artwork.image_url} alt={artwork.title} className="artwork-image" />
             <h2>{artwork.title}</h2>
             <p>{artwork.description}</p>
             <p>Price: ${artwork.price}</p>

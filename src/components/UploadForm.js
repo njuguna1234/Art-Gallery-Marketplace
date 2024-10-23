@@ -1,47 +1,60 @@
 import React, { useState } from 'react';
-import '../styles/Form.css'; // Assuming you're using a common form style
+import '../styles/Form.css';
 
-function UploadForm() {
+function ArtworkForm({ artistId, onSubmit }) {  // Accept artistId as prop
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [file, setFile] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [price, setPrice] = useState(0);
+  const [imageUrl, setImageUrl] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('price', price);
-    formData.append('image', file); // Ensure 'image' matches the backend key
 
-    try {
-      const response = await fetch('http://localhost:8001/artwork', {
-        method: 'POST',
-        body: formData,
+    // Create an object to send the data
+    const artworkData = {
+      title,
+      description,
+      price,
+      image_url: imageUrl,  // Send the image URL as part of the data
+      artist_id: artistId    // Use the artistId passed in as a prop
+    };
+
+    // Send data to the backend
+    fetch(`http://localhost:8001/artworks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(artworkData),  // Send artwork data as JSON
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Artwork uploaded successfully:', data);
+        // Optionally, you can call onSubmit to update the artwork list in ArtistProfile
+        if (onSubmit) {
+          onSubmit(data);
+        }
+        // Reset the form
+        setTitle('');
+        setDescription('');
+        setPrice(0);
+        setImageUrl('');
+      })
+      .catch((error) => {
+        console.error('Error uploading artwork:', error);
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error uploading artwork');
-      }
-
-      const data = await response.json();
-      setSuccessMessage(data.message || 'Artwork uploaded successfully!');
-      setErrorMessage('');
-    } catch (error) {
-      console.error('Error during artwork submission:', error);
-      setErrorMessage(error.message || 'An error occurred');
-      setSuccessMessage('');
-    }
   };
 
   return (
-    <div className="upload-form">
-      <h2>Upload Your Artwork</h2>
+    <div className="form-container">
       <form onSubmit={handleSubmit} className="form">
+        <h2>Upload Artwork</h2>
+
         <label htmlFor="title">Title</label>
         <input
           type="text"
@@ -56,10 +69,11 @@ function UploadForm() {
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          rows="4"
           required
         />
 
-        <label htmlFor="price">Price</label>
+        <label htmlFor="price">Price ($)</label>
         <input
           type="number"
           id="price"
@@ -68,22 +82,19 @@ function UploadForm() {
           required
         />
 
-        <label htmlFor="file">Upload Art</label>
+        <label htmlFor="imageUrl">Artwork Image URL</label>
         <input
-          type="file"
-          id="file"
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
+          type="text"
+          id="imageUrl"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
           required
         />
 
-        <button type="submit">Upload Artwork</button>
+        <button type="submit">Upload</button>
       </form>
-
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }
 
-export default UploadForm;
+export default ArtworkForm;
